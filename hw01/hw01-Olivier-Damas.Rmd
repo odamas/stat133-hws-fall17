@@ -1,0 +1,142 @@
+
+---
+title: "hw01-Olivier-Damas"
+subtitle: "Stat 133, Fall 2017"
+author: "Olivier Damas"
+output: github_document
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+# download RData file into your working directory
+```{r}
+# load data in your R session
+load("/Users/macbookpro/stat133/stat133-hws-fall17/hw01/data/nba2017-salary-points.RData")
+#head(player)
+```
+
+
+
+```{r}
+salary <- salary/1000000
+salary <- round(salary, digits=2)
+salary
+```
+
+```{r}
+experience <- replace(experience,  experience=="R" , 0)
+experience 
+as.numeric(experience)
+class(experience)
+typeof(experience)
+```
+
+```{r}
+factor(position, labels = c("center","power_fwd","point_guard","small_fwd","shoot_guard"))
+table(position)
+```
+
+```{r}
+plot(points, salary, main ="Salary vs Points",ylab = "Salary in Millions",xlab ="Points")
+``` 
+
+```{r}
+y <- sum(salary, na.rm = FALSE)/length(salary)
+y
+x <- sum(points, na.rm = FALSE)/length(points)
+varx <- sum((points- x)^2)/(length(points)-1)
+vary <- sum((salary- y)^2)/(length(salary)-1)
+sdx <- varx ^0.5
+sdy <- vary ^0.5
+covxy <- sum((points- x)*(salary- x))/(length(salary)-1)
+corxy <-(covxy)/ ((sdx)*(sdy))
+corxy
+gg<-cor(points,salary)
+``` 
+
+
+``
+
+```{r}
+b1 <- gg * (sdy/sdx)
+b0 <- y - (b1*x)
+b1
+b0
+Y <- b0 + b1*points
+summary(Y)
+
+``` 
+
+`r Y <- b0 + b1*points` 
+
+
+## Answer
+Ultimatly how big the coefficient b1 gives the effect that points have on salary, and the positive sign indicates that as points increase salary increases. 
+
+
+
+
+
+
+```{r}
+ Y0 <- b0 + b1*0 
+ Y0
+Y100 <- b0 + b1*100 
+Y100
+Y500 <- b0 + b1*500
+Y500
+Y1000 <- b0 + b1*1000
+Y1000 
+Y2000 <- b0 + b1*2000 
+Y2000
+``` 
+`r Y <- b0 + b1*0` 
+`r Y <- b0 + b1*100` 
+`r Y <- b0 + b1*500` 
+`r Y <- b0 + b1*1000` 
+`r Y <- b0 + b1*2000` 
+
+```{r}
+plot(points, salary, main ="Regression and Lowess lines",ylab = "Salary in Millions",xlab ="Points")
+abline(b0,b1)
+
+lines(lowess(points, salary))
+
+text(2400, 30, "lowess", col = "red") 
+text(2000, 15, "regression", col = "blue") 
+
+``` 
+
+```{r}
+summary(salary-y)
+TSS<- sum(salary-y)^2
+RSS<- sum(salary-Y)^2
+r2 <- 1 - RSS/TSS
+r2
+``` 
+
+
+
+```{r}
+
+plot(as.numeric(experience), salary, main ="Salary vs Years of Experience",ylab = "Salary in Millions",xlab ="Years of Experience")
+
+lines(lowess(experience, salary))
+
+``` 
+
+
+
+
+
+
+
+```{r}
+boxplot(salary ~position, main ="Salary vs Position",ylab = "Salary in Millions",xlab ="Position")
+```
+
+# from the scatterplot, experience does not seem to have an impact on salary. This is shown by the fact that players with higher years of experience were not receiving a greater salary than players with lower years of experience. This is shown by the relatively constant lows curve after the 5 year mark indicating that salary is not really changing as experience changes.
+from the box plot, salary appears to be relatively constant as the median looks to be the same across the positions. For centers, however, the the third quartile and maximum and highest of all the positions indicating that they do get paid more.
+Small forward offers a similar point of view but is not as dramatic as the center position.
+8. Hardest part by far is uploading the document and loading the aspects. I thought graphing was relatively easy. I like the Data 8 Jupyter Notebook much better. About 5 hours. I did not get help. Loading the document took forever and is very frustrating, the rest is interesting. 
