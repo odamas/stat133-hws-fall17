@@ -1,0 +1,94 @@
+
+---
+title: "hw02-Olivier-Damas"
+subtitle: "Stat 133, Fall 2017"
+author: "Olivier Damas"
+output: github_document
+---
+```{r}
+# download RData file into your working directory
+github <- "https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/"
+file <- "data/nba2017-player-statistics.csv"
+csv <- paste0(github,file)
+download.file(url = csv, destfile='nba2017-players-statistics.csv')
+```
+
+```{r}
+# R reader import
+dat1 <- read.csv("https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/data/nba2017-player-statistics.csv", colClasses=c("Player"="character","Team"="character", "Position"="factor", "Experience" ="character"))
+
+#3 Changing Experience
+dat1$Experience <- replace(dat1$Experience, dat1$Experience == "R", "0")
+dat1$Experience = as.integer(dat1$Experience)
+str(dat1)
+
+#4 Calculating EFF
+dat1$PTS <- NA
+dat1$PTS <-  dat1$Points3*(3) + dat1$Points2*(2)+ dat1$FTM*1
+dat1$REB <- NA
+dat1$REB <-  dat1$OREB + dat1$DREB
+dat1$MPG <- dat1$MIN/dat1$GP
+dat1$Missed_FG <-  dat1$FGA - dat1$FGM
+dat1$Missed_FT <-  dat1$FTA - dat1$FTM
+dat1$EFF <- NA
+dat1$EFF <-  (dat1$PTS + dat1$REB + dat1$AST + dat1$STL + dat1$BLK - dat1$Missed_FG - dat1$Missed_FT- dat1$TO)/ dat1$GP
+summary(dat1$EFF)
+hist(dat1$EFF)
+
+#4 Manipulation top ten EFF
+datnew <- subset(dat1, select=c("Player", "Team","EFF","Salary"))
+datnew[order(datnew$EFF,decreasing=T)[1:10],]
+
+
+#4 Manipulation negative EFF
+datnew1 <- subset(dat1, select=c("Player", "Team","EFF","Salary"))
+datnew1 <- datnew1[datnew1$EFF < 0,]
+datnew1 <- subset(datnew1, select=c("Player"))
+datnew1
+
+#4 Last Part
+p1 <- cor(dat1$PTS,dat1$EFF)
+p2 <- cor(dat1$REB,dat1$EFF)
+p3 <- cor(dat1$STL,dat1$EFF)
+p4 <- cor(dat1$AST,dat1$EFF)
+p5 <- cor(dat1$BLK,dat1$EFF)
+p6 <- -cor(dat1$Missed_FT,dat1$EFF)
+p7 <- -cor(dat1$Missed_FG,dat1$EFF)
+p8 <- - cor(dat1$TO,dat1$EFF)
+correlationvalue <-  c(p1,p2,p3,p4,p5,p6,p7,p8)
+statbb <- c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO")
+df = data.frame(statbb,correlationvalue) 
+df
+counts <- table(df)
+barplot(df$correlationvalue, width = 1, space = c(0.2,1), beside=TRUE, ylim = c(-1, 1),names = c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO"),cex.names=0.35)
+
+
+#5 Last Part
+plot(dat1$EFF, dat1$Salary, main="Efficiency vs Salary", 
+  	xlab="Efficiency ", ylab="Salary") 
+lines(lowess(dat1$EFF,dat1$Salary))
+cor(dat1$EFF,dat1$Salary)
+
+players2 <-  dat1[dat1$Experience==0,]
+players2<- players2[players2$MPG > 20,]
+players2
+plot(players2$EFF, players2$Salary, main="Efficiency vs Salary Rookies", 
+  	xlab="Efficiency ", ylab="Salary") 
+lines(lowess(players2$EFF,players2$Salary))
+cor(players2$EFF,players2$Salary)
+```
+
+
+
+```{r}
+# R table import
+library(tidyverse)
+dat2 <- read_csv("https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/data/nba2017-player-statistics.csv", col_names= TRUE, cols( "Player"= col_character(),"Team"=col_character(), "Experience" =col_character()))
+dat2$Position = as.factor(dat2$Position)
+str(dat2)
+
+
+
+
+```
+
