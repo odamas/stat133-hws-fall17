@@ -57,7 +57,8 @@ summary(dat1$EFF)
     ##  -0.600   5.452   9.090  10.140  13.250  33.840
 
 ``` r
-hist(dat1$EFF)
+EFF <- dat1$EFF
+hist(EFF)
 ```
 
 ![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-1-1.png)

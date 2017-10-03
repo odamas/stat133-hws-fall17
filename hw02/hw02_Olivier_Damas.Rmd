@@ -29,7 +29,8 @@ dat1$Missed_FT <-  dat1$FTA - dat1$FTM
 dat1$EFF <- NA
 dat1$EFF <-  (dat1$PTS + dat1$REB + dat1$AST + dat1$STL + dat1$BLK - dat1$Missed_FG - dat1$Missed_FT- dat1$TO)/ dat1$GP
 summary(dat1$EFF)
-hist(dat1$EFF)
+EFF <- dat1$EFF
+hist(EFF)
 
 #4 Manipulation find the top ten EFF
 datnew <- subset(dat1, select=c("Player", "Team","EFF","Salary"))
