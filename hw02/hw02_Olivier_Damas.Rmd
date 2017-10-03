@@ -5,24 +5,19 @@ subtitle: "Stat 133, Fall 2017"
 author: "Olivier Damas"
 output: github_document
 ---
-```{r}
-# download RData file into your working directory
-github <- "https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/"
-file <- "data/nba2017-player-statistics.csv"
-csv <- paste0(github,file)
-download.file(url = csv, destfile='nba2017-players-statistics.csv')
-```
+
+
 
 ```{r}
-# R reader import
 dat1 <- read.csv("https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/data/nba2017-player-statistics.csv", colClasses=c("Player"="character","Team"="character", "Position"="factor", "Experience" ="character"))
 
-#3 Changing Experience
+#3 Changing Experience to 
 dat1$Experience <- replace(dat1$Experience, dat1$Experience == "R", "0")
 dat1$Experience = as.integer(dat1$Experience)
 str(dat1)
 
 #4 Calculating EFF
+#create all the new stats
 dat1$PTS <- NA
 dat1$PTS <-  dat1$Points3*(3) + dat1$Points2*(2)+ dat1$FTM*1
 dat1$REB <- NA
@@ -30,23 +25,24 @@ dat1$REB <-  dat1$OREB + dat1$DREB
 dat1$MPG <- dat1$MIN/dat1$GP
 dat1$Missed_FG <-  dat1$FGA - dat1$FGM
 dat1$Missed_FT <-  dat1$FTA - dat1$FTM
+#create EFF
 dat1$EFF <- NA
 dat1$EFF <-  (dat1$PTS + dat1$REB + dat1$AST + dat1$STL + dat1$BLK - dat1$Missed_FG - dat1$Missed_FT- dat1$TO)/ dat1$GP
 summary(dat1$EFF)
 hist(dat1$EFF)
 
-#4 Manipulation top ten EFF
+#4 Manipulation find the top ten EFF
 datnew <- subset(dat1, select=c("Player", "Team","EFF","Salary"))
 datnew[order(datnew$EFF,decreasing=T)[1:10],]
 
 
-#4 Manipulation negative EFF
+#4 Manipulation find the negative EFF
 datnew1 <- subset(dat1, select=c("Player", "Team","EFF","Salary"))
 datnew1 <- datnew1[datnew1$EFF < 0,]
 datnew1 <- subset(datnew1, select=c("Player"))
 datnew1
 
-#4 Last Part
+#4Last Part correlation
 p1 <- cor(dat1$PTS,dat1$EFF)
 p2 <- cor(dat1$REB,dat1$EFF)
 p3 <- cor(dat1$STL,dat1$EFF)
@@ -60,34 +56,39 @@ statbb <- c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO")
 df = data.frame(statbb,correlationvalue) 
 df
 counts <- table(df)
-barplot(df$correlationvalue, width = 1, space = c(0.2,1), beside=TRUE, ylim = c(-1, 1),names = c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO"),cex.names=0.35)
+#barplote
+barplot(df$correlationvalue,main="Correlation of Efficiency  with other factors", width = 1, space = c(0.2,1), beside=TRUE, ylim = c(-1, 1),names = c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO"),cex.names=0.35)
 
 
-#5 Last Part
+#5 Efficiency and Salary
+#Looking at established players
 plot(dat1$EFF, dat1$Salary, main="Efficiency vs Salary", 
   	xlab="Efficiency ", ylab="Salary") 
 lines(lowess(dat1$EFF,dat1$Salary))
 cor(dat1$EFF,dat1$Salary)
 
-players2 <-  dat1[dat1$Experience==0,]
-players2<- players2[players2$MPG > 20,]
-players2
-plot(players2$EFF, players2$Salary, main="Efficiency vs Salary Rookies", 
+#The closer the correlation  coefficient is to 1.0, the stronger the relationship between the efficiency and salary. A correlation of 0.65 the presence of a  somewhat strong relationship.Moreover the positive value means as efficiency increases salary increases.
+
+#5 Looking at rookies
+players2 <- dat1[dat1$MPG > 20,]
+plot(players2$EFF, players2$Salary, main="Correlation between EFF and other stats", 
   	xlab="Efficiency ", ylab="Salary") 
 lines(lowess(players2$EFF,players2$Salary))
 cor(players2$EFF,players2$Salary)
+
+#The correlation coefficient of 0.65 for the experienced players means that the relationship is somewhat stronger for EFF and salary than in the less experienced group with a correlation coefficient of 0.53. This may be due to these players being less proven and terefore not as entitled to the salary raise. 
 ```
 
 
 
 ```{r}
-# R table import
+#2 Readr table import
 library(tidyverse)
 dat2 <- read_csv("https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/data/nba2017-player-statistics.csv", col_names= TRUE, cols( "Player"= col_character(),"Team"=col_character(), "Experience" =col_character()))
 dat2$Position = as.factor(dat2$Position)
 str(dat2)
 
-
+#6 Hardest part by far is uploading the document and loading the aspects. I thought graphing was relatively easy. I like the Data 8 Jupyter Notebook much better. About 5 hours. I did not get help. Loading the document took forever and is very frustrating, the rest is interesting.
 
 
 ```

@@ -3,18 +3,9 @@ hw02-Olivier-Damas
 Olivier Damas
 
 ``` r
-# download RData file into your working directory
-github <- "https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/"
-file <- "data/nba2017-player-statistics.csv"
-csv <- paste0(github,file)
-download.file(url = csv, destfile='nba2017-players-statistics.csv')
-```
-
-``` r
-# R reader import
 dat1 <- read.csv("https://raw.githubusercontent.com/ucb-stat133/stat133-fall-2017/master/data/nba2017-player-statistics.csv", colClasses=c("Player"="character","Team"="character", "Position"="factor", "Experience" ="character"))
 
-#3 Changing Experience
+#3 Changing Experience to 
 dat1$Experience <- replace(dat1$Experience, dat1$Experience == "R", "0")
 dat1$Experience = as.integer(dat1$Experience)
 str(dat1)
@@ -48,6 +39,7 @@ str(dat1)
 
 ``` r
 #4 Calculating EFF
+#create all the new stats
 dat1$PTS <- NA
 dat1$PTS <-  dat1$Points3*(3) + dat1$Points2*(2)+ dat1$FTM*1
 dat1$REB <- NA
@@ -55,6 +47,7 @@ dat1$REB <-  dat1$OREB + dat1$DREB
 dat1$MPG <- dat1$MIN/dat1$GP
 dat1$Missed_FG <-  dat1$FGA - dat1$FGM
 dat1$Missed_FT <-  dat1$FTA - dat1$FTM
+#create EFF
 dat1$EFF <- NA
 dat1$EFF <-  (dat1$PTS + dat1$REB + dat1$AST + dat1$STL + dat1$BLK - dat1$Missed_FG - dat1$Missed_FT- dat1$TO)/ dat1$GP
 summary(dat1$EFF)
@@ -67,10 +60,10 @@ summary(dat1$EFF)
 hist(dat1$EFF)
 ```
 
-![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-2-1.png)
+![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-1-1.png)
 
 ``` r
-#4 Manipulation top ten EFF
+#4 Manipulation find the top ten EFF
 datnew <- subset(dat1, select=c("Player", "Team","EFF","Salary"))
 datnew[order(datnew$EFF,decreasing=T)[1:10],]
 ```
@@ -88,7 +81,7 @@ datnew[order(datnew$EFF,decreasing=T)[1:10],]
     ## 119      Hassan Whiteside  MIA 25.36364 22116750
 
 ``` r
-#4 Manipulation negative EFF
+#4 Manipulation find the negative EFF
 datnew1 <- subset(dat1, select=c("Player", "Team","EFF","Salary"))
 datnew1 <- datnew1[datnew1$EFF < 0,]
 datnew1 <- subset(datnew1, select=c("Player"))
@@ -99,7 +92,7 @@ datnew1
     ## 188 Patricio Garino
 
 ``` r
-#4 Last Part
+#4Last Part correlation
 p1 <- cor(dat1$PTS,dat1$EFF)
 p2 <- cor(dat1$REB,dat1$EFF)
 p3 <- cor(dat1$STL,dat1$EFF)
@@ -126,19 +119,21 @@ df
 
 ``` r
 counts <- table(df)
-barplot(df$correlationvalue, width = 1, space = c(0.2,1), beside=TRUE, ylim = c(-1, 1),names = c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO"),cex.names=0.35)
+#barplote
+barplot(df$correlationvalue,main="Correlation of Efficiency  with other factors", width = 1, space = c(0.2,1), beside=TRUE, ylim = c(-1, 1),names = c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO"),cex.names=0.35)
 ```
 
-![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-2-2.png)
+![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-1-2.png)
 
 ``` r
-#5 Last Part
+#5 Efficiency and Salary
+#Looking at established players
 plot(dat1$EFF, dat1$Salary, main="Efficiency vs Salary", 
     xlab="Efficiency ", ylab="Salary") 
 lines(lowess(dat1$EFF,dat1$Salary))
 ```
 
-![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-2-3.png)
+![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-1-3.png)
 
 ``` r
 cor(dat1$EFF,dat1$Salary)
@@ -147,79 +142,29 @@ cor(dat1$EFF,dat1$Salary)
     ## [1] 0.655624
 
 ``` r
-players2 <-  dat1[dat1$Experience==0,]
-players2<- players2[players2$MPG > 20,]
-players2
-```
+#The closer the correlation  coefficient is to 1.0, the stronger the relationship between the efficiency and salary. A correlation of 0.65 the presence of a  somewhat strong relationship.Moreover the positive value means as efficiency increases salary increases.
 
-    ##                  Player Team Position Experience  Salary Rank Age GP GS
-    ## 80      Malcolm Brogdon  MIL       SG          0  925000    4  24 75 28
-    ## 126     Rodney McGruder  MIA       SG          0  543471    5  25 78 65
-    ## 191      Alex Poythress  PHI       PF          0   31969   16  23  6  1
-    ## 192         Dario Saric  PHI       PF          0 2318280    3  22 81 36
-    ## 196         Joel Embiid  PHI        C          0 4826160   11  22 31 31
-    ## 209        Caris LeVert  BRK       SF          0 1562280    9  22 57 26
-    ## 210    Isaiah Whitehead  BRK       PG          0 1074145    5  21 73 26
-    ## 264       Troy Williams  HOU       SF          0  150000   14  22  6  3
-    ## 297    Domantas Sabonis  OKC       PF          0 2440200    5  20 81 66
-    ## 310     Andrew Harrison  MEM       PG          0  945000    8  22 72 18
-    ## 343        Jamal Murray  DEN       SG          0 3210840    6  19 82 10
-    ## 372 Dorian Finney-Smith  DAL       PF          0  543471    4  23 81 35
-    ## 382        Yogi Ferrell  DAL       PG          0  207798    9  23 36 29
-    ## 386         Buddy Hield  SAC       SG          0 3517200   12  23 25 18
-    ## 412      Brandon Ingram  LAL       SF          0 5281680    2  19 79 40
-    ## 437     Marquese Chriss  PHO       PF          0 2941440    4  19 82 75
-    ##      MIN FGM FGA Points3 Points3_atts Points2 Points2_atts FTM FTA OREB
-    ## 80  1982 290 635      78          193     212          442 109 126   47
-    ## 126 1966 190 460      73          220     117          240  44  71   95
-    ## 191  157  25  54       6           19      19           35   8  10   11
-    ## 192 2129 381 927     106          341     275          586 172 220  112
-    ## 196  786 200 429      36           98     164          331 191 244   61
-    ## 209 1237 171 380      59          184     112          196  67  93   23
-    ## 210 1643 204 508      44          149     160          359  91 113   32
-    ## 264  139  22  44       8           21      14           23   6   7    9
-    ## 297 1632 192 481      51          159     141          322  44  67   45
-    ## 310 1474 117 360      43          156      74          204 148 194   23
-    ## 343 1764 295 729     115          344     180          385 106 120   41
-    ## 372 1642 124 333      56          191      68          142  46  61   55
-    ## 382 1046 142 345      60          149      82          196  64  73   16
-    ## 386  727 142 296      59          138      83          158  35  43   16
-    ## 412 2279 276 686      55          187     221          499 133 214   60
-    ## 437 1743 284 632      72          224     212          408 113 181   96
-    ##     DREB AST STL BLK  TO  PTS REB      MPG Missed_FG Missed_FT       EFF
-    ## 80   166 317  84  12 113  767 213 26.42667       345        17 12.240000
-    ## 126  162 124  45  18  56  497 257 25.20513       270        27  7.538462
-    ## 191   18   5   3   2   3   64  29 26.16667        29         2 11.500000
-    ## 192  402 182  57  30 183 1040 514 26.28395       546        48 12.913580
-    ## 196  182  66  27  76 117  627 243 25.35484       229        53 20.645161
-    ## 209  165 110  49   8  59  468 188 21.70175       209        26  9.280702
-    ## 210  152 192  42  36 142  543 184 22.50685       304        22  7.246575
-    ## 264   15   6   3   1   6   58  24 23.16667        22         1 10.500000
-    ## 297  242  82  39  32  83  479 287 20.14815       289        23  6.469136
-    ## 310  113 198  54  20  85  425 136 20.47222       243        46  6.375000
-    ## 343  173 170  53  24 113  811 214 21.51220       434        14  8.670732
-    ## 372  166  67  52  25  45  350 221 20.27160       209        15  5.506173
-    ## 382   83 155  40   7  56  408  99 29.05556       203         9 12.250000
-    ## 386   87  44  20   2  53  378 103 29.08000       154         8 13.280000
-    ## 412  257 166  50  36 116  740 317 28.84810       410        81  8.886076
-    ## 437  252  60  67  70 108  753 348 21.25610       348        68  9.439024
-
-``` r
-plot(players2$EFF, players2$Salary, main="Efficiency vs Salary Rookies", 
+#5 Looking at rookies
+players2 <- dat1[dat1$MPG > 20,]
+plot(players2$EFF, players2$Salary, main="Correlation between EFF and other stats", 
     xlab="Efficiency ", ylab="Salary") 
 lines(lowess(players2$EFF,players2$Salary))
 ```
 
-![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-2-4.png)
+![](hw02_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-1-4.png)
 
 ``` r
 cor(players2$EFF,players2$Salary)
 ```
 
-    ## [1] 0.3803924
+    ## [1] 0.5367224
 
 ``` r
-# R table import
+#The correlation coefficient of 0.65 for the experienced players means that the relationship is somewhat stronger for EFF and salary than in the less experienced group with a correlation coefficient of 0.53. This may be due to these players being less proven and terefore not as entitled to the salary raise. 
+```
+
+``` r
+#2 Readr table import
 library(tidyverse)
 ```
 
@@ -319,3 +264,7 @@ str(dat2)
     ##   ..$ default: list()
     ##   .. ..- attr(*, "class")= chr  "collector_guess" "collector"
     ##   ..- attr(*, "class")= chr "col_spec"
+
+``` r
+#6 Hardest part by far is uploading the document and loading the aspects. I thought graphing was relatively easy. I like the Data 8 Jupyter Notebook much better. About 5 hours. I did not get help. Loading the document took forever and is very frustrating, the rest is interesting.
+```
