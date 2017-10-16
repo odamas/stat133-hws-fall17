@@ -1,0 +1,85 @@
+---
+title: "HW03"
+output: github_document
+---
+
+```{r}
+## Download the files
+library(dplyr)
+library(ggplot2)
+setwd('/Users/macbookpro/stat133/stat133-hws-fall17/hw03')
+nba_stats <- read.csv('../hw03/data/nba2017-stats.csv', stringsAsFactors = FALSE)
+nba_roster <- read.csv('../hw03/data/nba2017-roster .csv', stringsAsFactors = FALSE)
+str(nba_stats)
+
+##Adding new variables
+nba_stats <- mutate(nba_stats, missed_fg = field_goals_atts - field_goals_made)
+nba_stats <- mutate(nba_stats, points = 3*points3_made + 2*points2_made + points1_made)
+nba_stats <- mutate(nba_stats, rebounds = off_rebounds + def_rebounds)
+nba_stats <- mutate(nba_stats,  missed_ft = points1_atts - points1_made)
+nba_stats <- mutate(nba_stats, efficiency = (points + rebounds + assists + steals + blocks - missed_fg - missed_ft - turnovers) / games_played)
+
+##Merging Tables
+nba2017_teams <- merge(nba_stats,nba_roster,by="player")
+nba2017_teams
+nba2017_teams <- merge(nba_stats,nba_roster,by="player")
+
+##summarize
+nba2017_teams <-summarise(group_by(nba2017_teams, team),experience = sum(experience), salary = sum(salary)/1000000,points3 = sum(points3_made), points2 = sum(points2_made), free_throws = sum(points1_made), points = sum(points), off_rebounds = sum(off_rebounds), 
+                          def_rebounds =sum(def_rebounds), assists = sum(assists), steals = sum(steals), blocks = sum(blocks), turnovers = sum(turnovers),  fouls = sum(fouls), efficiency = sum(efficiency))
+is.data.frame(nba2017_teams)
+nba2017_teams
+summary(nba2017_teams[ ,c('experience','salary', 'points3','points2','free_throws','points','off_rebounds','efficiency', 'def_rebounds', 'assists','steals','blocks','turnovers','fouls')])
+
+
+
+
+## Salary Ranking
+ggplot(nba2017_teams, aes(x = reorder(team, salary), y = salary)) +
+  geom_bar(stat='identity') +
+  coord_flip() + labs(x = "Team") + labs(y= "Salary (in millions)") + labs(title = "NBA Teams ranked by Total Salary") + geom_hline(aes(yintercept= mean(salary),colour='red'))
+
+## NBA Player Total Points 
+ggplot(nba2017_teams, aes(x = reorder(team, points), y = points)) +
+  geom_bar(stat='identity') +
+  coord_flip() + labs(x = "Team") + labs(y= "Total Points") + labs(title = "NBA Teams ranked by Total Points") + geom_hline(aes(yintercept= mean(points),colour='red'))
+
+
+## NBA Player Efficiency
+ggplot(nba2017_teams, aes(x = reorder(team, efficiency), y = efficiency)) +
+  geom_bar(stat='identity') +
+  coord_flip() + labs(x = "Team") + labs(y= "Total Efficiency") + labs(title = "NBA Teams ranked by Total Efficiency") + geom_hline(aes(yintercept= mean(efficiency),colour='red'))
+
+##data frame with the eigenvalues
+team <- select(nba2017_teams,points3,points2, free_throws,off_rebounds,def_rebounds,assists,steals, blocks, turnovers, fouls)
+team <- prcomp(team,scale = TRUE)
+eigenvalue <- team$sdev^2
+eigenvalue <- round(eigenvalue,4)
+prop <- team$sdev^2/sum(team$sdev^2)
+prop <- round(prop,4)
+cumprop <- team$sdev^2
+cumprop <- cumprop/sum(cumprop)
+cumprop <-  cumsum(cumprop)
+cumprop <- round(cumprop,4)
+df <-   data.frame(eigenvalue, prop, cumprop)
+
+##Plot PC1 vs PC2
+PC1<- c(team$x[,1])
+PC2<- c(team$x[,2])
+Names <- c(nba2017_teams$team)
+warnock <- data.frame(Names,PC1,PC2)
+ggplot(data = nba2017_teams , aes(x = PC1, y = PC2)) +
+ geom_text(aes(label=Names),hjust=0, vjust=0) + geom_hline(yintercept = 0) + geom_vline(xintercept = 0) + labs(title = "PCA plot (PC1 and PC2)")
+
+##The NBA team that had the highest salary is Cleveland. They had a much bigger total salary spending than the mean at above 120. Although Cleveland  had the highest salary spending, this did not translate to high points as Cleveland was fourth in the ranking and GSW was highest. However, Cleveland had the highest Cleveland total efficiency meaning they were getting bang for buck in terms of their efficiency. Interestingly, the team that scored the most points did not have the highest efficiency or the or the highest total salary. Ultimately, GSW won the NBA meaning that efficiency will not necessarily correlate with victories or overall success.
+
+
+#Rank NBA Teams
+index_PC1 <-(warnock$PC1- min(PC1))/ (max(PC1) - min(PC1)) * 100
+names <- c(nba2017_teams$team)
+scaled_PC1 <- data.frame(names,PC1)
+ggplot(scaled_PC1, aes(x = reorder(names,index_PC1 ), y = index_PC1)) +
+  geom_bar(stat='identity') +
+  coord_flip() + labs(x = "Team") + labs(y= "First PC (scaled from 0 to 100)") + labs(title = "NBA Teams ranked by scaled PC1") 
+```
+
