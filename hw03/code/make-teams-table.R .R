@@ -39,7 +39,7 @@ summary(nba2017_teams[ ,c('experience','salary', 'points3','points2','free_throw
 sink()
 
 ## export the teams table to a csv file named nba2017-teams.csv, inside the data/ folder
-write.csv(nba2017_teams, file = "../hw03/data/teams.csv")
+write.csv(nba2017_teams, file = "../hw03/data/nba2017_teams.csv")
 
 ##star plot of the teams.
 setwd('/Users/macbookpro/stat133/stat133-hws-fall17/hw03')
