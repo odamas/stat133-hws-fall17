@@ -1,7 +1,3 @@
-An Introduction to Lesser-Know Data Manipulation Packages
-================
-Olivier Damas
-
 Introduction
 ------------
 
@@ -103,14 +99,14 @@ Let's look at graphing
 barChart(AAPL) 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-1.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
 ``` r
 #Change background to white 
 barChart(AAPL,theme="white")
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-2.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-5-2.png)
 
 Unfortunately, the functionality of the package does not allow the user to add their own individualised x and y axis. However, you can clearly see the x axis representing the date selection chosen, from January 2013 to today. While the y axis displays the price of one stock of Apple at that particular time. The bottom graph represents the volumes sold at each period in time.
 
@@ -122,13 +118,13 @@ First, you can use the zoom chart function to go into detail on a particular tim
 barChart(AAPL)
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 ``` r
 zoomChart("last 2 months") # zoom in to the last two months
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-2.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-6-2.png)
 
 Notice how the graph now focuses on the time period from September 1 2017 to today, hence the last two months.
 
@@ -140,19 +136,19 @@ The weighted moving average allows the person looking at the stock price to get 
 barChart(AAPL,multi.col=TRUE,theme="white") #draw the chart 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 ``` r
 zoomChart("last 2 months") #pick certain date range
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-2.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-7-2.png)
 
 ``` r
 addWMA() #draw the weighted average curve
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-3.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-7-3.png)
 
 Notice the use of colour in the graph above, this is achieved through the multi.col=TRUE feature. This feature will colour the bar chart line. The colours give the reader additional insight into the price movements of the stock; red bars reflect that the stock closed on a lower price than the day before. Grey colour reflects that the stock closed on a higher price than the day before. Black colour means that the closing price remained the same as the day before.
 
@@ -162,19 +158,19 @@ In addition to doing a bar chart, you can look at other ways to graph. Try using
 candleChart(AAPL,multi.col=TRUE,theme='white')  #draw the chart 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
 ``` r
 zoomChart("last 2 months") #pick certain date range
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-2.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-8-2.png)
 
 ``` r
 addWMA() #draw the weighted average curve
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-3.png)
+![](Post1-Olivier-Damas_files/figure-markdown_github/unnamed-chunk-8-3.png)
 
 The candle chart gives an even more representative picture of the price movements of the stock on a given day. There are four possible combinations of colours: a red filled candlestick, a red hollow candlestick, a black filled candlestick and a black hollow candlestick.
 

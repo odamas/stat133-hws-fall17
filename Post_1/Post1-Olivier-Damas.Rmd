@@ -1,7 +1,9 @@
 ---
 title: "An Introduction to Lesser-Know Data Manipulation Packages"
 author: "Olivier Damas"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 ## Introduction
