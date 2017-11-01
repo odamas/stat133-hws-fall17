@@ -1,7 +1,3 @@
-An introduction to packages for data manipulation not seen in Stats 133
-================
-Olivier Damas
-
 Introduction
 ------------
 
@@ -14,7 +10,7 @@ The tutorial is organised into 3 different packages: quantmode, reshape2 and tid
 1st Package: Quantmod
 ---------------------
 
-Say you have an interest in working with data related to stocks and the stockmarket, quantmod would be the package for you.
+Say you have an interest in working with data related to stocks and the stock market, quantmod would be the package for you.
 
 Run the block below to install and load the package.
 
@@ -103,18 +99,18 @@ Let's look at graphing
 barChart(AAPL) 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
 ``` r
 #Change background to white 
 barChart(AAPL,theme="white")
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-5-2.png)
 
 Unfortunately, the functionality of the package does not allow the user to add their own individualised x and y axis. However, you can clearly see the x axis representing the date selection chosen, from January 2013 to today. While the y axis displays the price of one stock of Apple at that particular time. The bottom graph represents the volumes sold at each period in time.
 
-You can add functions to the chart to facilate analysis.
+You can add functions to the chart to facilitate analysis.
 
 First, you can use the zoom chart function to go into detail on a particular time period.
 
@@ -122,39 +118,39 @@ First, you can use the zoom chart function to go into detail on a particular tim
 barChart(AAPL)
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 ``` r
 zoomChart("last 2 months") # zoom in to the last two months
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-6-2.png)
 
 Notice how the graph now focuses on the time period from September 1 2017 to today, hence the last two months.
 
-A popular tool used by traders is the Weighed Moving Average.Taken from Oanda, a forex trading website, the weighted moving average displays the average price at a given point in time, however, it puts more emphasis on recent data than other moving averages.It does this by assigning values that are linearly weighted to ensure that the most recent rates have a greater impact on the average than older periods.
+A popular tool used by traders is the Weighted Moving Average.Taken from Oanda, a forex trading website, the weighted moving average displays the average price at a given point in time, however, it puts more emphasis on recent data than other moving averages.It does this by assigning values that are linearly weighted to ensure that the most recent rates have a greater impact on the average than older periods.
 
-The weighed moving average allows the person looking at the stock price to get a clearer picture of how the stock has been performing minus all the noise (the ups and downs on a given day) over time. Use the addWMA() to add the Weighed Moving Average to the Apple graph. It should be the light green line you now see on the graph.
+The weighted moving average allows the person looking at the stock price to get a clearer picture of how the stock has been performing minus all the noise (the ups and downs on a given day) over time. Use the addWMA() to add the Weighted Moving Average to the Apple graph. It should be the light green line you now see on the graph.
 
 ``` r
 barChart(AAPL,multi.col=TRUE,theme="white") #draw the chart 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 ``` r
 zoomChart("last 2 months") #pick certain date range
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-7-2.png)
 
 ``` r
-addWMA() #draw the weighed average curve
+addWMA() #draw the weighted average curve
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-3.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-7-3.png)
 
-Notice the use of colour in the graph above, this is achieved through the multi.col=TRUE feature. This feature will colour the bar chart line. The colours give the reader additional insight into the price movements of the stock; red bars reflect that the stock closed on a lower price than the day before. Grey colour reflets that the stock closed on a higher price than the day before. Black colour means that the closing price remained the same as the day before.
+Notice the use of colour in the graph above, this is achieved through the multi.col=TRUE feature. This feature will colour the bar chart line. The colours give the reader additional insight into the price movements of the stock; red bars reflect that the stock closed on a lower price than the day before. Grey colour reflects that the stock closed on a higher price than the day before. Black colour means that the closing price remained the same as the day before.
 
 In addition to doing a bar chart, you can look at other ways to graph. Try using the candlechart below and compare the results you get.
 
@@ -162,19 +158,19 @@ In addition to doing a bar chart, you can look at other ways to graph. Try using
 candleChart(AAPL,multi.col=TRUE,theme='white')  #draw the chart 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
 ``` r
 zoomChart("last 2 months") #pick certain date range
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-8-2.png)
 
 ``` r
-addWMA() #draw the weighed average curve
+addWMA() #draw the weighted average curve
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-3.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-8-3.png)
 
 The candle chart gives an even more representative picture of the price movements of the stock on a given day. There are four possible combinations of colours: a red filled candlestick, a red hollow candlestick, a black filled candlestick and a black hollow candlestick.
 
@@ -189,7 +185,7 @@ There are many more functions you can use in quantmod. Check the reference secti
 2nd Package: reshape2
 ---------------------
 
-This package can be used to reshape and reorganise datatsets of all kinds in a more digestible form. Dowload and load the package below:
+This package can be used to reshape and reorganise data sets of all kinds in a more digestible form. Download and load the package below:
 
 ``` r
 #install.packages('reshape2')
@@ -203,7 +199,7 @@ The melt function changes data from wide format to a long format.This should be 
 First create a data frame
 
 ``` r
-#create a dataframe to work with
+#create a data frame to work with
 Rank_in_Height <- c(1,2,3,4,5)
 Hair_Colour <- c('Black','Grey','Brown','Brown','Blond')
 Age <- c(18,17,19,20,21)
@@ -250,12 +246,12 @@ As seen above, the melt function allows the columns of Age and Hair Colour to me
 
 Another function in the package is the cast function.
 
-Cast is more or less the reverse of melt. There are two version: dcast (returns a dataframe as output) and acast (returns a matrix/array). This could be used when you see a variable being repeated over and over again in a column and corresponding to a different variable each time.
+Cast is more or less the reverse of melt. There are two version: dcast (returns a data frame as output) and acast (returns a matrix/array). This could be used when you see a variable being repeated over and over again in a column and corresponding to a different variable each time.
 
-Using the dataframe we just made, we can reconvert it. Check out the code below.
+Using the data frame we just made, we can reconvert it. Check out the code below.
 
 ``` r
-# the cast funciton follows the following format cast(data, formula, function), it has the reverse effect of melt
+# the cast function follows the following format cast(data, formula, function), it has the reverse effect of melt
 newmt <- dcast(mt, Name + Rank_in_Height + Age + Hair_Colour ~ variable)
 newmt
 ```
@@ -297,7 +293,7 @@ library(tidyr)
     ## 
     ##     smiths
 
-Use the following data set to work with tidyr
+Use the following dataset to work with tidyr
 
 ``` r
 #create this dataset
@@ -379,7 +375,7 @@ short_dat
 
 The next two functions of tidyr are especially relevant when dealing with time.
 
-When we encouter a variable containing a combination of date and time, we can use the separate function to split the variable into columns. Refer to the example below:
+When we encounter a variable containing a combination of date and time, we can use the separate function to split the variable into columns. Refer to the example below:
 
 -&gt; Note, here is how you use separate separate(Column you want to separate, c('Column you want to form', 'Column you want to form','Column you want to form') Sep=how you want to identify the separation)
 
@@ -440,7 +436,7 @@ unite_(sep_dat, "Date",c('Month', 'Date','Year'),sep = " ")
 Conclusion
 ==========
 
-As the user can see,the pacakges I have outlined can be used for different datasets at different times. If you are dealing with stocks, quantmod would be optimal. If you are dealing with vast amounts of repetitive variables, or clunky information especially related to time and date, the reshape2 and tidyr packages may helpful to gain some clarity. Always remember to go back to basics first withh ggplot and dplyr, but know that quantmode, reshape2 and tidyr can be used to supplement your manipulation.
+As the user can see,the packages I have outlined can be used for different datasets at different times. If you are dealing with stocks, quantmod would be optimal. If you are dealing with vast amounts of repetitive variables, or clunky information especially related to time and date, the reshape2 and tidyr packages may helpful to gain some clarity. Always remember to go back to basics first with ggplot and dplyr, but know that quantmode, reshape2 and tidyr can be used to supplement your manipulation.
 
 References
 ==========
