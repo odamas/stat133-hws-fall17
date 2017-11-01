@@ -1,9 +1,7 @@
 ---
 title: "An introduction to packages for data manipulation not seen in Stats 133"
 author: "Olivier Damas"
-output:
-  md_document:
-    variant: markdown_github
+output: html_document
 ---
 
 ## Introduction
@@ -256,7 +254,7 @@ unite_(sep_dat, "Date",c('Month', 'Date','Year'),sep = " ")
 ```
 #Conclusion 
 
-As the user can see,the pacakges I have outlined can be used for different datasets at different times. If you are dealing with stocks, quantmod would be optimal. If you are dealing with vast amounts of repetitive variables, or clunky information especially related to time and date, the reshape2 and tidyr packages may helpful to gain some clarity. Always remember to go back to basics first withh ggplot and dplyr but use these to supplement.   
+As the user can see,the pacakges I have outlined can be used for different datasets at different times. If you are dealing with stocks, quantmod would be optimal. If you are dealing with vast amounts of repetitive variables, or clunky information especially related to time and date, the reshape2 and tidyr packages may helpful to gain some clarity. Always remember to go back to basics first withh ggplot and dplyr, but know that quantmode, reshape2 and tidyr can be used to supplement your manipulation.  
 
 
 #References
