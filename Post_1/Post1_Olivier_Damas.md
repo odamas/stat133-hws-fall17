@@ -1,9 +1,13 @@
+An Introduction to Lesser-Know Data Manipulation Packages
+================
+Olivier Damas
+
 Introduction
 ------------
 
-This document will provide users with the opportunity to learn about a variety of methods for reading and working with data in R. At the end of this tutorial, the user have will new tools to tackle the various data sets he may encounter while using R. We will try to go above and beyond the scope of 133 and look at some lesser known packages intended for specific kinds of data.
+This document will provide users with the opportunity to learn about a variety of methods for reading and working with data in R. At the end of this tutorial, the user will have new tools to help tackle the various data sets he or she may encounter while using R. We will try to go above and beyond the scope of 133 and look at lesser-known packages intended for specific kinds of data.
 
-The tutorial is organised into 3 different packages: quantmode, reshape2 and tidyr. A "---" line means the start of a new package.
+The tutorial is organised into 3 different packages: quantmode, reshape2 and tidyr, followed by a conclusion and references. Each major headline marks the start of a new section.
 
 ------------------------------------------------------------------------
 
@@ -69,7 +73,7 @@ head(AAPL)
     ## 2007-01-09     12.35     13.28    12.16      13.22   838036682
     ## 2007-01-10     13.54     13.97    13.35      13.86   739605951
 
-As you can see, the datafranme provides the opening, closing, lowest and highest price of Apple stock from 2007 to today. You can change the date by adding y/m/d in the following form, see an example below:
+As you can see, the data frame provides the opening, closing, lowest and highest price of Apple stock from 2007 to today. You can change the date by adding y/m/d in the following form, see an example below:
 
 ``` r
 # add  from= and to= to set a scope
@@ -90,7 +94,7 @@ head(AAPL)
     ## 2013-01-08     75.60     75.98    74.46      75.04   114676751
     ## 2013-01-09     74.64     75.00    73.71      73.87   101899959
 
-The dataframe is no longer showing variables from 2077
+The data frame is no longer showing variables from 2077
 
 Let's look at graphing
 
@@ -99,14 +103,14 @@ Let's look at graphing
 barChart(AAPL) 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-5-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-1.png)
 
 ``` r
 #Change background to white 
 barChart(AAPL,theme="white")
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-5-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-2.png)
 
 Unfortunately, the functionality of the package does not allow the user to add their own individualised x and y axis. However, you can clearly see the x axis representing the date selection chosen, from January 2013 to today. While the y axis displays the price of one stock of Apple at that particular time. The bottom graph represents the volumes sold at each period in time.
 
@@ -118,13 +122,13 @@ First, you can use the zoom chart function to go into detail on a particular tim
 barChart(AAPL)
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
 
 ``` r
 zoomChart("last 2 months") # zoom in to the last two months
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-6-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-2.png)
 
 Notice how the graph now focuses on the time period from September 1 2017 to today, hence the last two months.
 
@@ -136,19 +140,19 @@ The weighted moving average allows the person looking at the stock price to get 
 barChart(AAPL,multi.col=TRUE,theme="white") #draw the chart 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
 
 ``` r
 zoomChart("last 2 months") #pick certain date range
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-7-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-2.png)
 
 ``` r
 addWMA() #draw the weighted average curve
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-7-3.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-3.png)
 
 Notice the use of colour in the graph above, this is achieved through the multi.col=TRUE feature. This feature will colour the bar chart line. The colours give the reader additional insight into the price movements of the stock; red bars reflect that the stock closed on a lower price than the day before. Grey colour reflects that the stock closed on a higher price than the day before. Black colour means that the closing price remained the same as the day before.
 
@@ -158,19 +162,19 @@ In addition to doing a bar chart, you can look at other ways to graph. Try using
 candleChart(AAPL,multi.col=TRUE,theme='white')  #draw the chart 
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
 
 ``` r
 zoomChart("last 2 months") #pick certain date range
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-8-2.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-2.png)
 
 ``` r
 addWMA() #draw the weighted average curve
 ```
 
-![](Post1_Olivier_Damas_files/figure-markdown_github/unnamed-chunk-8-3.png)
+![](Post1_Olivier_Damas_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-3.png)
 
 The candle chart gives an even more representative picture of the price movements of the stock on a given day. There are four possible combinations of colours: a red filled candlestick, a red hollow candlestick, a black filled candlestick and a black hollow candlestick.
 
@@ -436,15 +440,31 @@ unite_(sep_dat, "Date",c('Month', 'Date','Year'),sep = " ")
 Conclusion
 ==========
 
-As the user can see,the packages I have outlined can be used for different datasets at different times. If you are dealing with stocks, quantmod would be optimal. If you are dealing with vast amounts of repetitive variables, or clunky information especially related to time and date, the reshape2 and tidyr packages may helpful to gain some clarity. Always remember to go back to basics first with ggplot and dplyr, but know that quantmode, reshape2 and tidyr can be used to supplement your manipulation.
+As the user can see,the packages I have outlined can be used for different datasets at different times. If you are dealing with stocks, quantmod would be optimal. If you are dealing with vast amounts of repetitive variables all trapped in a long column, or clunky information especially related to time and date, the reshape2 and tidyr packages may helpful to gain some clarity. Always remember to go back to basics first with ggplot and dplyr, but know that quantmode, reshape2 and tidyr can be used to supplement your manipulation.
 
 References
 ==========
 
-Quantmod <https://www.quantmod.com/examples/charting/> <https://cran.r-project.org/web/packages/quantmod/quantmod.pdf>
+Quantmod
 
-Tidyr <https://www.analyticsvidhya.com/blog/2015/12/faster-data-manipulation-7-packages/> <https://blog.rstudio.com/2014/07/22/introducing-tidyr/>
+“Quantmod: Graphing.” Quantmod: Examples :: Charting, Quantmod , www.quantmod.com/examples/charting/.
 
-Reshape2 <http://seananderson.ca/2013/10/19/reshape.html> <https://cran.r-project.org/web/packages/reshape2/reshape2.pdf>
+“Package ‘Quantmod.’” 6 Oct. 2017, www.cran.r-project.org/web/packages/quantmod/quantmod.pdf.
 
-Comparing Reshape2 vs Tidyr <http://www.milanor.net/blog/reshape-data-r-tidyr-vs-reshape2/>
+“GET STARTED MOVING AVERAGE.” OANDA, www.oanda.com/forex-trading/learn/trading-tools-strategies/moving-averages.
+
+Tidyr
+
+Team, Analytics Vidhya Content, et al. “Do Faster Data Manipulation Using These 7 R Packages.” Analytics Vidhya, 16 Feb. 2016, www.analyticsvidhya.com/blog/2015/12/faster-data-manipulation-7-packages/.
+
+“Introducing Tidyr.” RStudio Blog, RStudio Blog, www.blog.rstudio.com/2014/07/22/introducing-tidyr/.
+
+Reshape2
+
+Anderson, Sean. “An Introduction to reshape2.” An Introduction to reshape2, www.seananderson.ca/2013/10/19/reshape.html.
+
+“Package ‘Reshape2.’”22 Oct. 2017,<https://cran.r-project.org/web/packages/reshape2/reshape2.pdf>
+
+Comparing Reshape2 vs Tidyr
+
+Giudici, Alberto. How to Reshape Data in R: Tidyr vs reshape2. 20 June 2016, www.milanor.net/blog/reshape-data-r-tidyr-vs-reshape2/.
