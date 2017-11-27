@@ -1,0 +1,166 @@
+# title: functions
+# description: all the code for numerous functions
+# ======================================================
+  
+# Remove Missing function. Takes a vector and 
+# returns the input vector without missing values.
+remove_missing <- function(vect) {
+  vect[!is.na(vect)]
+}
+
+# Gets the min value of a vector
+get_minimum <-  function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){
+    new <- remove_missing(vect)
+  }
+  sort(vect)[1] 
+}
+
+# Gets the max value of a vector
+get_maximum <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){
+    new <- remove_missing(vect)
+  }
+  sort(vect, decreasing = TRUE)[1] 
+}
+
+# Uses get_max and get_min to get the range of a vect.
+get_range <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){
+    new <- remove_missing(vect)
+  }
+  get_maximum(new) - get_minimum(new)
+}
+# Gets the median value of the vector
+get_median <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){
+    vect <- remove_missing(vect)
+  }
+  if(length(vect) %% 2 == 0){
+    (sort(vect)[length(vect)/2] + sort(vect)[length(vect)/2 + 1])/2
+  }
+  else{
+    sort(vect)[length(vect)%/%2 + 1]
+  }
+}
+# Gets the 10th percentile of a vector
+get_percentile10 <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){vect <- remove_missing(vect)}
+  quantile(vect, 0.1)[[1]]
+}
+# Gets the 90th percentile of a vector
+get_percentile90 <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){vect <- remove_missing(vect)}
+  quantile(vect, 0.9)[[1]]
+}
+# Computes the first quartile of a vector
+get_quartile1 <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){vect <- remove_missing(vect)}
+  quantile(vect, 0.25)[[1]]
+}
+# Computes the 3rd quartile of a vector
+get_quartile3 <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){vect <- remove_missing(vect)}
+  quantile(vect, 0.75)[[1]]
+}
+# Computes mean of the input vector
+get_average <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){
+    vect <- remove_missing(vect)
+  }
+  total <- 0
+  for (i in 1:length(vect)){
+    total <- total + vect[i]
+  }
+  total/length(vect)
+}
+# Computes the SD of the input vector
+get_stdev <- function(vect, na.rm = TRUE){
+  if(mode(vect) != 'numeric') stop("non-numeric argument")
+  if(na.rm == TRUE){
+    vect <- remove_missing(vect)
+  }
+  avg <- get_average(vect)
+  total <- 0
+  for (i in 1:length(vect)){
+    total <- total+(vect[i]-avg)**2
+  }
+  sqrt(total/(length(vect)-1))
+}
+# Calcs number of missing values
+count_missing <- function(vect){
+  total <- 0
+  for (i in 1:length(vect)){
+    total <- total + anyNA(vect[i])
+  }
+  total
+}
+# Returns the list of summary stats.
+summary_stats <- function(vect){
+  list(minimum = get_minimum(vect), percent10 = get_percentile10(vect), 
+       quartile1 = get_quartile1(vect),median = get_median(vect), 
+       quartile3 = get_quartile3(vect), percent90 = get_percentile90(vect),
+       maximum = get_maximum(vect), range = get_range(vect), 
+       stdev = get_stdev(vect), missing = count_missing(vect)
+  )
+}
+# Makes numbers to 4 decimal places.
+formulate <- function(num){
+  sprintf('%0.4f', num)
+}
+# Prints the value in a nice format
+print_stats <- function(lst){
+  name <- names(lst)
+  outcome <- c()
+  for (i in 1:length(lst)){
+    if (nchar(name[i])==max(nchar(names(lst)))){
+      cat(name[i], ": ", formulate(lst[[i]]), "\n", sep = "")
+    }
+    else{
+      cat(name[i], c(rep(" ", max(nchar(names(lst)))-nchar(name[i]))),
+          ": ", formulate(lst[[i]]), "\n", sep = "")
+    }
+  }
+}
+
+# Drops the lowest score
+drop_lowest <- function(n){
+  n[n!=get_minimum(n)]
+}
+# Rescales a vector from 0-100
+rescale100 <- function(x, xmin, xmax){
+  100*(x-xmin)/(xmax-xmin)
+}
+# Takes a numeric vector of homework scores (of length n), 
+# and an optional logical argument drop, to compute a single homework value. 
+# If drop = TRUE, the lowest HW score must be dropped. 
+score_homework <- function(n, drop = TRUE){
+  if(drop==TRUE){n <- drop_lowest(n)}
+  get_average(n)
+}
+# takes a numeric vector of quiz scores (of length n), and an optional
+# logical argument drop, to compute a single quiz value
+# The function should return the average of the quiz scores
+score_quiz <- function(n, drop = TRUE){
+  if(drop==TRUE){n <- drop_lowest(n)}
+  get_average(n)  
+}
+# Takes the numeric value of lab attendance, and returns the lab score.
+score_lab <- function(n){
+  if(n==11 | n==12){100}
+  else if(n==10){80}
+  else if(n==9){60}
+  else if(n==8){40}
+  else if(n==7){20}
+  else if(n<=6){0}
+}
+
